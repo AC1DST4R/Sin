@@ -48,7 +48,7 @@ body.redflash{background:#180000}
 <div id="feed" aria-live="off"></div>
 <div id="bottom"><span>DO NOT CLOSE THIS WINDOW</span><span id="count">SIGNAL: 0%</span></div>
 <div id="err"><div id="errorbox"><div id="errorcode">404</div><div id="errtitle">CONNECTION TIMED OUT</div><div id="errtext">THE SERVER STOPPED RESPONDING.<br>THE MESSAGE COULD NOT BE DELIVERED.<br><br>RETRYING... RETRYING... RETRYING...</div><div id="bar"><span></span></div></div></div>
-<div id="overlay"><div id="startbox"><h1>PLEASE LISTEN</h1><div id="intro">THE ARCHIVE IS DAMAGED.<br>.<br><br>.<br>.<br>.</div><button id="start">OPEN THE ARCHIVE</button></div></div>
+<div id="overlay"><div id="startbox"><h1>PLEASE LISTEN</h1><div id="intro">THE ARCHIVE IS DAMAGED.<br>THE FOLLOWING CONTENT MIGHT BE DISTURBING.<br><br>She can hear you.<br>She can see you.<br>Don't speak out loud.</div><button id="start">OPEN THE ARCHIVE</button></div></div>
 <script>
 (() => {
 const feed = document.getElementById('feed');
@@ -70,6 +70,7 @@ const messages = [
   ['we are suffering', 'red'],
   ['SHE CAN STILL HEAR US', ''],
   ['We die by her hand', 'red']
+  ['MRS CASILLAS WAS BETTER THAN HER', 'red']
 ];
 let running = false, total = 0, timers = [];
 const pick = a => a[Math.floor(Math.random()*a.length)];
