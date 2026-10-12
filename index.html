@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLEASE LISTEN</title>
+<style>
+:root{--red:#ff2020;--dark:#050505}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:var(--dark);color:#eee;font-family:"Courier New",monospace;overflow:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,transparent 0 2px,#0008 3px 4px);mix-blend-mode:multiply}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:6;background:radial-gradient(ellipse at center,transparent 20%,#000 100%)}
+#top{position:fixed;z-index:8;top:14px;left:16px;right:16px;display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:2px;color:#777}
+#status{color:var(--red);animation:blink 1.1s steps(2,end) infinite}
+#feed{position:absolute;inset:45px 0 35px;padding:20px 5vw;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:4px}
+.line{font-weight:900;font-size:clamp(18px,3vw,40px);line-height:1.1;letter-spacing:1px;color:#f2eeee;text-shadow:2px 0 #850000,-2px 0 #5c0000;overflow-wrap:anywhere;animation:appear .14s steps(2,end) both}
+.line.red{color:var(--red);text-shadow:0 0 8px #f001,2px 0 #600}
+.line.small{font-size:clamp(12px,1.5vw,19px);color:#777;font-weight:400}
+.line.glitch{animation:glitch .25s steps(2,end) both}
+#overlay{position:fixed;z-index:10;inset:0;background:#000;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .7s}
+#overlay.hidden{opacity:0;pointer-events:none}
+#startbox{max-width:650px}
+h1{color:var(--red);font-size:clamp(28px,6vw,66px);letter-spacing:5px;margin:0 0 22px;text-shadow:0 0 18px #f003;animation:blink 2s infinite}
+#intro{color:#888;line-height:1.8;font-size:13px;margin-bottom:26px}
+button{font-family:inherit;letter-spacing:3px;color:#eee;background:#100;border:1px solid #8d1111;padding:15px 25px;cursor:pointer}
+button:hover{background:#300;border-color:var(--red)}
+#err{position:fixed;z-index:9;inset:0;background:#030303;display:none;align-items:center;justify-content:center;padding:25px}
+#err.show{display:flex;animation:errflash .12s steps(2,end) infinite}
+#errorbox{max-width:700px;width:100%;border:1px solid #a00;padding:clamp(20px,5vw,55px);box-shadow:0 0 70px #f001}
+#errorcode{font-size:clamp(45px,12vw,120px);color:var(--red);font-weight:bold;letter-spacing:-5px}
+#errtitle{font-size:clamp(17px,3vw,30px);margin:10px 0 25px}
+#errtext{color:#777;font-size:12px;line-height:1.9}
+#bar{height:3px;background:#250000;margin-top:25px;overflow:hidden}
+#bar span{display:block;height:100%;width:30%;background:var(--red);animation:load .8s linear infinite}
+#bottom{position:fixed;z-index:8;bottom:12px;left:16px;right:16px;display:flex;justify-content:space-between;color:#555;font-size:10px;letter-spacing:1px}
+body.shake{animation:shake .18s linear}
+body.redflash{background:#180000}
+@keyframes blink{0%,48%{opacity:1}49%,100%{opacity:.28}}
+@keyframes appear{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes glitch{0%{transform:translateX(0);clip-path:inset(0)}25%{transform:translateX(5px);clip-path:inset(30% 0 40%)}50%{transform:translateX(-6px);clip-path:inset(60% 0 5%)}100%{transform:translateX(0);clip-path:inset(0)}}
+@keyframes shake{0%,100%{transform:translate(0)}25%{transform:translate(4px,-2px)}50%{transform:translate(-3px,2px)}75%{transform:translate(2px,3px)}}
+@keyframes errflash{0%,100%{filter:none}50%{filter:contrast(1.8) brightness(1.3)}}
+@keyframes load{from{transform:translateX(-120%)}to{transform:translateX(350%)}}
+</style>
+</head>
+<body>
+<div id="top"><span>UNKNOWN HOST // SESSION CORRUPTED</span><span id="status">● LIVE FEED</span></div>
+<div id="feed" aria-live="off"></div>
+<div id="bottom"><span>DO NOT CLOSE THIS WINDOW</span><span id="count">SIGNAL: 0%</span></div>
+<div id="err"><div id="errorbox"><div id="errorcode">404</div><div id="errtitle">CONNECTION TIMED OUT</div><div id="errtext">THE SERVER STOPPED RESPONDING.<br>THE MESSAGE COULD NOT BE DELIVERED.<br><br>RETRYING... RETRYING... RETRYING...</div><div id="bar"><span></span></div></div></div>
+<div id="overlay"><div id="startbox"><h1>PLEASE LISTEN</h1><div id="intro">THE ARCHIVE IS DAMAGED.<br>THE FOLLOWING CONTENT MAY BE DISTURBING.<br><br>THE CONNECTION IS NOT REAL.<br>THE ERRORS ARE NOT REAL.<br>THE MESSAGES WILL NOT STOP.</div><button id="start">OPEN THE ARCHIVE</button></div></div>
+<script>
+(() => {
+const feed = document.getElementById('feed');
+const overlay = document.getElementById('overlay');
+const err = document.getElementById('err');
+const status = document.getElementById('status');
+const count = document.getElementById('count');
+const messages = [
+  ['GIVE US OUR FACES BACK', 'red glitch'],
+  ['BRING MR SNIDER BACK', 'red'],
+  ['We die by her hand', ''],
+  ['we are suffering', 'red'],
+  ['BRING MR SNIDER BACK', 'glitch red'],
+  ['WHY DID YOU LET THIS HAPPEN', ''],
+  ['We die by her hand', 'red'],
+  ['we are suffering', ''],
+  ['HE WAS SUPPOSED TO COME BACK', 'red'],
+  ['BRING MR SNIDER BACK', ''],
+  ['we are suffering', 'red'],
+  ['SHE CAN STILL HEAR US', ''],
+  ['We die by her hand', 'red']
+];
+let running = false, total = 0, timers = [];
+const pick = a => a[Math.floor(Math.random()*a.length)];
+function line(text, cls='') {
+  const el = document.createElement('div');
+  el.className = 'line ' + cls;
+  el.textContent = text;
+  feed.appendChild(el);
+  total++;
+  count.textContent = 'SIGNAL: ' + (Math.floor(Math.random()*20)+1) + '%';
+  while(feed.children.length > 32) feed.firstElementChild.remove();
+  if(Math.random() < .12) {
+    document.body.classList.add('shake');
+    setTimeout(()=>document.body.classList.remove('shake'), 180);
+  }
+}
+function fakeError() {
+  if(!running) return;
+  err.classList.add('show');
+  status.textContent = '● NO RESPONSE';
+  status.style.color = '#ff2020';
+  if(Math.random()<.6) document.getElementById('errorcode').textContent='404';
+  else document.getElementById('errorcode').textContent='ERR_TIMED_OUT';
+  setTimeout(() => {
+    err.classList.remove('show');
+    status.textContent = '● LIVE FEED';
+  }, 1000 + Math.random()*1400);
+}
+function loop() {
+  if(!running) return;
+  const item = pick(messages);
+  line(item[0], item[1] + (Math.random()<.16 ? ' glitch' : ''));
+  if(Math.random()<.14) line(pick(['BRING HIM BACK','PLEASE','CAN ANYONE HEAR US','404','DO NOT LOOK AWAY']), 'small');
+  if(Math.random()<.035) fakeError();
+  timers.push(setTimeout(loop, 70 + Math.random()*210));
+}
+document.getElementById('start').addEventListener('click', () => {
+  if(running) return;
+  running = true;
+  overlay.classList.add('hidden');
+  setTimeout(()=>overlay.remove(), 800);
+  for(let i=0;i<7;i++) setTimeout(()=>line(pick(messages)[0], 'red glitch'), i*95);
+  loop();
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && running) {
+    running = false;
+    timers.forEach(clearTimeout);
+    err.classList.remove('show');
+    status.textContent = '● FEED PAUSED';
+    line('...SILENCE...', 'small');
+  }
+});
+})();
+</script>
+</body>
+</html>
